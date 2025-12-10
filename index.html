@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Performance Analysis Dashboard (Offline)</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      font-family: "Segoe UI", sans-serif;
+      background-color: #f5f6fa;
+      margin: 0;
+      padding: 20px;
+    }
+    h2 {
+      color: #1e2b44;
+      margin-bottom: 10px;
+    }
+    .container {
+      display: flex;
+      gap: 30px;
+      align-items: flex-start;
+    }
+    .form-box, .chart-box {
+      background: #fff;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    }
+    .form-box {
+      width: 320px;
+    }
+    label {
+      display: block;
+      margin-top: 10px;
+      font-weight: 600;
+    }
+    input, select {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+    button {
+      background-color: #6a1b9a;
+      color: white;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 8px;
+      margin-top: 15px;
+      cursor: pointer;
+      font-weight: 600;
+      width: 100%;
+    }
+    button:hover {
+      background-color: #4a148c;
+    }
+    .info-cards {
+      display: flex;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+    .card {
+      flex: 1;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      text-align: center;
+    }
+    .card h3 {
+      margin: 0;
+      color: #555;
+      font-size: 16px;
+    }
+    .card p {
+      font-size: 28px;
+      font-weight: bold;
+      color: #1e2b44;
+      margin-top: 8px;
+    }
+  </style>
+</head>
+<body>
+  <h2>Student_Performance Analysis_Prediction</h2>
+
+  <!-- Predicted Score and Rank Cards -->
+  <div class="info-cards">
+    <div class="card">
+      <h3>Predicted Final Score (%)</h3>
+      <p id="predictedScore">--</p>
+    </div>
+    <div class="card">
+      <h3>Predicted Rank</h3>
+      <p id="predictedRank">--</p>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="form-box">
+      <h3>Add New Semester Data</h3>
+      <label>Semester</label>
+      <select id="semester">
+        <option value="S6">S6</option>
+        <option value="S7">S7</option>
+        <option value="S8">S8</option>
+      </select>
+      <label>Previous Semester Score (%)</label>
+      <input type="number" id="prevScore" value="85" />
+      <label>Attendance (%)</label>
+      <input type="number" id="attendance" value="80" />
+      <label>Internal Marks (Out of 50)</label>
+      <input type="number" id="internalMarks" value="46" />
+      <label>Viva Marks (Out of 10)</label>
+      <input type="number" id="vivaMarks" value="9" />
+      <label>No. of Activities Participated</label>
+      <input type="number" id="activities" value="4" />
+      <button onclick="saveData()">Save Data & Recalculate Analysis</button>
+      <button onclick="clearData()">Clear All Data</button>
+    </div>
+
+    <div class="chart-box" style="flex-grow:1">
+      <h3>Feature Importance (Gini) Visualization</h3>
+      <canvas id="featureChart"></canvas>
+    </div>
+  </div>
+
+  <script>
+    const chartCtx = document.getElementById("featureChart").getContext("2d");
+    let chartInstance;
+
+    // Load data from localStorage
+    const loadData = () => JSON.parse(localStorage.getItem("semesterData") || "[]");
+
+    // Save data to localStorage
+    function saveData() {
+      const data = loadData();
+      const newEntry = {
+        semester: document.getElementById("semester").value,
+        prevScore: parseFloat(document.getElementById("prevScore").value),
+        attendance: parseFloat(document.getElementById("attendance").value),
+        internalMarks: parseFloat(document.getElementById("internalMarks").value),
+        vivaMarks: parseFloat(document.getElementById("vivaMarks").value),
+        activities: parseFloat(document.getElementById("activities").value),
+      };
+
+      newEntry.predictedScore = predictScore(newEntry);
+      data.push(newEntry);
+      localStorage.setItem("semesterData", JSON.stringify(data));
+
+      updatePredictedScoreAndRank(data, newEntry);
+      updateChart(data);
+    }
+
+    // Predict score using weighted formula
+    function predictScore(entry) {
+      let score =
+        0.5 * entry.prevScore +
+        0.2 * entry.attendance +
+        0.15 * (entry.internalMarks / 50) * 100 +
+        0.1 * (entry.vivaMarks * 10) +
+        0.05 * (entry.activities * 5);
+
+      return Math.min(score.toFixed(2), 100);
+    }
+
+    // Update score & rank
+    function updatePredictedScoreAndRank(data, latest) {
+      const sorted = [...data].sort((a, b) => b.predictedScore - a.predictedScore);
+      const rank = sorted.findIndex((d) => d === latest) + 1;
+      const percentile = ((rank / sorted.length) * 100).toFixed(1);
+
+      document.getElementById("predictedScore").textContent = latest.predictedScore + " %";
+      document.getElementById("predictedRank").textContent =
+        "Top " + percentile + "% (" + rank + "/" + sorted.length + ")";
+    }
+
+    // Feature importance (simulated Gini)
+    function calculateFeatureImportance(data) {
+      if (data.length === 0) return {};
+
+      let imp = {
+        "Previous_Semester_Score_%": 0,
+        "Attendance_%": 0,
+        "No_of_Activities_Participated": 0,
+        "Semester_S6": 0,
+        "Semester_S7": 0,
+        "Semester_S8": 0,
+      };
+
+      data.forEach((d) => {
+        imp["Previous_Semester_Score_%"] += d.prevScore / 100;
+        imp["Attendance_%"] += d.attendance / 200;
+        imp["No_of_Activities_Participated"] += d.activities / 50;
+
+        if (d.semester === "S6") imp["Semester_S6"] += 0.02;
+        if (d.semester === "S7") imp["Semester_S7"] += 0.05;
+        if (d.semester === "S8") imp["Semester_S8"] += 0.03;
+      });
+
+      const total = Object.values(imp).reduce((a, b) => a + b, 0);
+      Object.keys(imp).forEach((k) => (imp[k] = imp[k] / total));
+      return imp;
+    }
+
+    // Update Gini chart
+    function updateChart(data) {
+      const importance = calculateFeatureImportance(data);
+      const labels = Object.keys(importance);
+      const values = Object.values(importance);
+
+      if (chartInstance) chartInstance.destroy();
+
+      chartInstance = new Chart(chartCtx, {
+        type: "bar",
+        data: {
+          labels: labels,
+          datasets: [
+            {
+              label: "Relative Importance (Gini)",
+              data: values,
+              backgroundColor: "#3B82F6",
+            },
+          ],
+        },
+        options: {
+          indexAxis: "y",
+          scales: {
+            x: {
+              beginAtZero: true,
+              title: { display: true, text: "Relative Importance (Gini)" },
+            },
+          },
+          plugins: {
+            legend: { display: false },
+            title: {
+              display: true,
+              text: "Feature Importance for Final Score Prediction (Random Forest Simulation)",
+            },
+          },
+        },
+      });
+    }
+
+    // Clear all data
+    function clearData() {
+      localStorage.removeItem("semesterData");
+      document.getElementById("predictedScore").textContent = "--";
+      document.getElementById("predictedRank").textContent = "--";
+      if (chartInstance) chartInstance.destroy();
+    }
+
+    // Initialize chart and info on load
+    const existing = loadData();
+    updateChart(existing);
+    if (existing.length > 0) {
+      const last = existing[existing.length - 1];
+      updatePredictedScoreAndRank(existing, last);
+    }
+  </script>
+</body>
+</html>
+
