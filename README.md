@@ -136,7 +136,7 @@ Provides analytical understanding of important academic features and trends.
 ## 👩‍💻 Author
 
 **Saakshi Chandrakant Nalawade**  
-Third Year Computer Engineering  
+Final Year Computer Engineering  
 Artificial Intelligence & Machine Learning (Honours)  
 University of Mumbai  
 📍 Navi Mumbai, Maharashtra  
