@@ -1,57 +1,154 @@
-🎓 Student Performance Analyzer
+# 🎓 Student Performance Analyzer
 
-An AI-based web application that predicts and analyzes student academic performance using machine learning techniques. This project integrates data preprocessing, model training, and interactive web visualization to demonstrate real-world applications of AI and analytics in education.
+Student Performance Analyzer is an AI-based web application that predicts and analyzes **student academic performance** using machine learning techniques.
 
-🚀 Overview
+This project integrates **data preprocessing**, **model training**, and **interactive web visualization** to demonstrate real-world applications of **Artificial Intelligence and Analytics in Education**.
 
-The Student Performance Analyzer utilizes historical academic data such as attendance, study hours, and grades to predict scores, ranks, and performance categories. It provides educators and students with interpretable visual insights into the factors that influence academic success.
+---
 
-🧠 Key Features
+## 🚀 Overview
 
-📈 Dynamic prediction of student performance (marks, rank, and category)
+The Student Performance Analyzer utilizes historical academic data such as **attendance**, **study hours**, and **grades** to predict:
 
-🧮 Random Forest Regression and Decision Tree Classification for predictions
+- **Student Scores**
+- **Student Rank**
+- **Performance Category**
 
-📊 Interactive Gini-style visualization of predicted vs. actual performance
+It provides students and educators with interpretable insights into the key factors that influence academic success.
 
-🧠 Integrated exploratory data analysis (EDA) and feature correlation insights
+---
 
-💻 Flask-based web interface with responsive frontend and real-time interaction
+## ✨ Features
 
-⚙️ Tech Stack Layer Technologies Frontend HTML, Tailwind CSS, JavaScript, Chart.js Backend Flask (Python) Machine Learning scikit-learn, pandas, numpy Visualization Matplotlib, Chart.js Storage CSV Dataset 📂 Project Structure student-performance-analyzer/ │ ├── static/ │ ├── css/ → styles.css │ ├── js/ → chart.js, main.js │ └── assets/ │ ├── templates/ │ └── index.html │ ├── app.py ├── model.pkl ├── requirements.txt └── README.md
+- Predicts **student performance dynamically** using academic input data.
+- Estimates **marks, rank, and performance category**.
+- Uses **Random Forest Regression** and **Decision Tree Classification** for predictions.
+- Includes **interactive visualization** of predicted vs. actual performance.
+- Provides **Exploratory Data Analysis (EDA)** and feature-based insights.
+- Offers a **Flask-based web interface** with responsive design and real-time interaction.
+- Helps in understanding patterns that affect student academic performance.
 
-🧩 How It Works
+---
 
-Upload Dataset (CSV format) containing student academic details.
+## 🚀 How to Run
 
-Preprocessing & Model Prediction: ML models analyze features and predict performance metrics.
+### 1. Clone the repository
 
-Flask Backend: Processes input and serves predictions to the UI.
+```bash
+git clone https://github.com/saakshinalawade/Student_performance_Analyzer.git
+cd Student_performance_Analyzer
+```
 
-Frontend Visualization: Displays results and comparisons interactively using Chart.js.
+### 2. Install requirements
 
-🧾 Sample Output Parameter Example Output Predicted Score 78.5 Predicted Rank 5 Performance Status Excellent Visualization Gini-style comparison of predicted vs. actual scores 🖼️ Screenshots & Demo
+```bash
+pip install -r requirements.txt
+```
 
-Add your screenshots in this section (GitHub automatically renders them beautifully). You can include them like this once you upload to your repo:
+### 3. Run the application
 
-Application Interface
-App UI
+```bash
+python app.py
+```
 
-Performance Visualization
-Gini Chart
+---
 
-📌 Tip: Place your screenshots inside /static/assets/ and refer to them using relative paths as shown above.
+## 🛠️ Technologies Used
 
-🌱 Future Scope
+- **Python**
+- **Flask**
+- **HTML**
+- **Tailwind CSS**
+- **JavaScript**
+- **Chart.js**
+- **scikit-learn**
+- **pandas**
+- **numpy**
+- **Matplotlib**
 
-Integration with SQL/Firebase for persistent data storage
+---
 
-Deep Learning model adaptation for improved accuracy
+## 📂 Project Structure
 
-Class-wise and subject-level performance dashboards
+```bash
+student-performance-analyzer/
+│
+├── static/
+│   ├── css/
+│   │   └── styles.css
+│   ├── js/
+│   │   ├── chart.js
+│   │   └── main.js
+│   └── assets/
+│
+├── templates/
+│   └── index.html
+│
+├── app.py
+├── model.pkl
+├── requirements.txt
+└── README.md
+```
 
-Personalized study recommendations based on prediction trends
+---
 
-👩‍💻 Author
+## 🧩 How It Works
 
-Saakshi Chandrakant Nalawade Third Year Computer Engineering | AI & ML (Honours) University of Mumbai 📍 Navi Mumbai, Maharashtra
+### 📁 Dataset Input
+The application accepts academic data such as attendance, study time, and grades.
+
+### ⚙️ Data Processing & Prediction
+The backend preprocesses the input data and applies machine learning models for prediction.
+
+### 🧠 Model Analysis
+The trained models estimate student performance metrics such as marks and category.
+
+### 📊 Visualization
+The frontend displays prediction results and comparisons interactively using charts and graphs.
+
+---
+
+## 📸 Output Preview
+<img width="1252" height="678" alt="image" src="https://github.com/user-attachments/assets/2eee8a54-65ed-4374-b9f3-b320086df63b" />
+
+<img width="1891" height="279" alt="image" src="https://github.com/user-attachments/assets/ef63319e-bbff-4cef-b822-1353291346f7" />
+
+<img width="1877" height="822" alt="image" src="https://github.com/user-attachments/assets/488f4a81-3f7c-4c4c-a884-c9b20c80b169" />
+
+---
+
+## 🎯 Modules Included
+
+### 📈 Performance Prediction
+Predicts student marks and academic standing based on input data.
+
+### 🧮 Machine Learning Models
+Uses regression and classification algorithms for performance analysis.
+
+### 📊 Visualization Dashboard
+Displays student performance insights using interactive visual charts.
+
+### 🧠 Data Analysis
+Provides analytical understanding of important academic features and trends.
+
+---
+
+## 👩‍💻 Author
+
+**Saakshi Chandrakant Nalawade**  
+Third Year Computer Engineering  
+Artificial Intelligence & Machine Learning (Honours)  
+University of Mumbai  
+📍 Navi Mumbai, Maharashtra  
+
+---
+
+## 📄 License
+
+This project is developed for **academic and educational purposes**.
+
+---
+
+## 🌟 Acknowledgment
+
+Special thanks to all the open-source libraries and machine learning tools that contributed to the development of this project.
